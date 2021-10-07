@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App.jsx';
+import App from './App';
+
+//引入初始全局css
+import '@/assets/css/reset.css';
 
 ReactDOM.render(
   <React.StrictMode>
