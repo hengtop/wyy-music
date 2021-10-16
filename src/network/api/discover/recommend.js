@@ -7,3 +7,36 @@ export const getBannerList = () => {
     url: '/banner'
   });
 };
+
+//获取热门推荐
+export const getHotRecommend = (limit) => {
+  return reactRequest.request({
+    method: 'GET',
+    url: '/personalized',
+    params: {
+      limit
+    }
+  });
+};
+
+//获取新碟上架
+export const getNewAlbum = (limit) => {
+  return reactRequest.request({
+    method: 'GET',
+    url: '/top/album',
+    params: {
+      limit
+    }
+  });
+};
+
+//获取榜单
+export const getRecommendRanking = (idx) => {
+  return reactRequest.request({
+    method: 'GET',
+    url: '/top/list',
+    params: {
+      idx
+    }
+  });
+};

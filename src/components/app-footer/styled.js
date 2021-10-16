@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 
 export const FooterWrapper = styled.div`
+  padding-bottom: 50px;
   padding-top: 20px;
-  border-top: 1px solid #d3d3d3;
+  border-top: 1px solid var(--borderColor);
   .content {
     display: flex;
     justify-content: space-between;

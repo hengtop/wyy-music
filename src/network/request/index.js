@@ -31,7 +31,7 @@ export default class ReactRequest {
             //执行自定义的拦截器
             res = config.interceptors.responseInterceptor(res);
           }
-          resolve(res);
+          resolve(res.data);
         })
         .catch((err) => {
           reject(err);

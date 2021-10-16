@@ -11,6 +11,7 @@ import Artist from '@/pages/discover/child-pages/artist';
 import Djradio from '@/pages/discover/child-pages/djradio';
 import Ranking from '@/pages/discover/child-pages/ranking';
 import Songs from '@/pages/discover/child-pages/songs';
+import Player from '@/pages/player';
 
 const routes = [
   {
@@ -52,6 +53,10 @@ const routes = [
       {
         path: '/discover/songs',
         component: Songs
+      },
+      {
+        path: '/discover/player',
+        component: Player
       }
     ]
   },

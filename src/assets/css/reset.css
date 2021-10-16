@@ -4,6 +4,7 @@
 
 :root {
   --themeColor: #c20c0c;
+  --borderColor: #d3d3d3;
 }
 
 body,
@@ -111,7 +112,7 @@ button {
   background: url(../img/sprite_02.png) no-repeat 0 9999px;
 }
 
-.sprite_covor {
+.sprite_cover {
   background: url(../img/sprite_cover.png) no-repeat 0 9999px;
 }
 
@@ -158,7 +159,7 @@ button {
   top: 0;
   bottom: 0;
   text-indent: -9999px;
-  background: url(../img/sprite_cover.png) no-repeat -145px -57px;
+  background: url(../img/coverall.png) no-repeat -145px -57px;
 }
 
 .sprite_player {

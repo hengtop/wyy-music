@@ -5,6 +5,7 @@ import routes from './router';
 
 import SaberHeader from 'components/app-header';
 import SaberFooter from 'components/app-footer';
+import SaberPlayerBar from '@/pages/player/app-player-bar';
 
 export default memo(function App() {
   return (
@@ -12,6 +13,7 @@ export default memo(function App() {
       <SaberHeader></SaberHeader>
       {renderRoutes(routes)}
       <SaberFooter></SaberFooter>
+      <SaberPlayerBar></SaberPlayerBar>
     </div>
   );
 });

@@ -35,7 +35,8 @@ export const HeaderLeft = styled.div`
       padding: 0 19px;
       font-size: 14px;
       color: #ccc;
-      &:hover {
+      &:hover,
+      &.active {
         background: #000;
         text-decoration: none;
         color: #fff;
