@@ -7,6 +7,7 @@ import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { useChangeBanner } from '@/hooks/useChangeBanner';
 
 import { getTopBannerAction } from '../../store/actionCreators';
+import { getBlurImg } from '@/utils/format-utils';
 
 import { TopBannerWraper, TopBannerLeft, TopBannerRight } from './style';
 
@@ -48,7 +49,7 @@ export default memo(function index(props) {
   //背景图片
   const bgImage =
     topBanners[currentIndex] &&
-    topBanners[currentIndex].imageUrl + '?imageView&blur=40x20';
+    getBlurImg(topBanners[currentIndex].imageUrl, 40, 20);
   //轮播切换回调
   const bannerChange = useCallback((from, to) => {
     setCurrentIndex(to);

@@ -2,12 +2,14 @@ import styled from 'styled-components';
 
 export const DiscoverWrapper = styled.div`
   .top {
+    min-width: 980px;
     height: 30px;
     background-color: var(--themeColor);
   }
 `;
 
 export const TopMenu = styled.div`
+  min-width: 980px;
   display: flex;
   padding-left: 180px;
   position: relative;

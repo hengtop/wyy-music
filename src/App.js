@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, Suspense } from 'react';
 import { renderRoutes } from 'react-router-config';
 
 import routes from './router';
@@ -11,7 +11,7 @@ export default memo(function App() {
   return (
     <div>
       <SaberHeader></SaberHeader>
-      {renderRoutes(routes)}
+      <Suspense fallback={<div>加载中</div>}>{renderRoutes(routes)}</Suspense>
       <SaberFooter></SaberFooter>
       <SaberPlayerBar></SaberPlayerBar>
     </div>

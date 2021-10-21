@@ -5,7 +5,7 @@ import { getSizeImg } from '../../utils/format-utils';
 import { AlbumCoverWrapper } from './style';
 
 export default memo(function index(props) {
-  //设置封面的一些参数
+  //设置封面的一些默认参数
   const {
     albumInfo,
     width = '118',

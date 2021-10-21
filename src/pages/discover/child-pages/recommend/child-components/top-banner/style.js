@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const TopBannerWraper = styled.div`
   width: 100%;
+  min-width: 980px;
   height: 285px;
   background-image: url(${(props) => props.bgImage});
   background-size: 6000px;

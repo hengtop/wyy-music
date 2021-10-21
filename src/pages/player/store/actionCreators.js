@@ -31,7 +31,7 @@ export const changeCurrentLyricIndexAction = (res) => ({
   currentLyricIndex: res
 });
 
-//切换歌曲 ,通过一些操作播放下一首歌曲
+//上下切换歌曲 ,通过一些操作播放下一首歌曲
 export const changeCurrentSongPlayAction = (tag) => {
   return (dispatch, getState) => {
     const playList = getState().getIn(['player', 'playList']);

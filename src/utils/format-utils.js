@@ -34,3 +34,8 @@ export const formatTimestamp = (time) => {
 export const getPlaySongUrl = (id) => {
   return `https://music.163.com/song/media/outer/url?id=${id}.mp3`;
 };
+
+//处理图片虚化
+export const getBlurImg = (url, x, y) => {
+  return url + `?imageView&blur=${x}x${y}`;
+};

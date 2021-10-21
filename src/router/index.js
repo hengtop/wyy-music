@@ -1,17 +1,17 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { Redirect } from 'react-router-dom';
 
-import Discover from '@/pages/discover';
-import Friends from '@/pages/friends';
-import Mine from '@/pages/mine';
+const Discover = lazy(() => import('@/pages/discover'));
+const Friends = lazy(() => import('@/pages/friends'));
+const Mine = lazy(() => import('@/pages/mine'));
 
-import Recommend from '@/pages/discover/child-pages/recommend';
-import Album from '@/pages/discover/child-pages/album';
-import Artist from '@/pages/discover/child-pages/artist';
-import Djradio from '@/pages/discover/child-pages/djradio';
-import Ranking from '@/pages/discover/child-pages/ranking';
-import Songs from '@/pages/discover/child-pages/songs';
-import Player from '@/pages/player';
+const Recommend = lazy(() => import('@/pages/discover/child-pages/recommend'));
+const Album = lazy(() => import('@/pages/discover/child-pages/album'));
+const Artist = lazy(() => import('@/pages/discover/child-pages/artist'));
+const Djradio = lazy(() => import('@/pages/discover/child-pages/djradio'));
+const Ranking = lazy(() => import('@/pages/discover/child-pages/ranking'));
+const Songs = lazy(() => import('@/pages/discover/child-pages/songs'));
+const Player = lazy(() => import('@/pages/player'));
 
 const routes = [
   {

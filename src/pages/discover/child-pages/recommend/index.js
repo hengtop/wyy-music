@@ -11,6 +11,8 @@ import HotRecommend from './child-components/hot-recommend';
 import NewAlbum from './child-components/new-album';
 import RecommendRanking from './child-components/recommend-ranking';
 import UserLogin from './child-components/user-login';
+import SettleSinger from './child-components/settle-singer';
+import HotAnchor from './child-components/hot-anchor';
 
 function SaberRecommend(props) {
   return (
@@ -24,6 +26,8 @@ function SaberRecommend(props) {
         </RecommendLeft>
         <RecommendRight>
           <UserLogin />
+          <SettleSinger />
+          <HotAnchor />
         </RecommendRight>
       </Content>
     </RecommendWrapper>

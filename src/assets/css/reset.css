@@ -151,6 +151,9 @@ button {
 .sprite_table {
   background: url(../img/sprite_table.png) no-repeat 0 9999px;
 }
+.sprite_list {
+  background: url(../img/playlist.png) no-repeat 0 9999px;
+}
 
 .image_cover {
   position: absolute;

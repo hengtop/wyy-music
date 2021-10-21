@@ -3,7 +3,9 @@ import {
   getBannerList,
   getHotRecommend,
   getNewAlbum,
-  getRecommendRanking
+  getRecommendRanking,
+  getSettleSinger,
+  getHotAnchor
 } from '@/network/api/discover/recommend';
 
 export const changeTopBannerAction = (res) => ({
@@ -32,6 +34,14 @@ export const changeUpSongAction = (res) => ({
 export const changeOriginalSongAction = (res) => ({
   type: actionTypes.CHANGE_ORIGINAL_SONGS,
   originalSongs: res.playlist
+});
+export const changeSettleSingerAction = (res) => ({
+  type: actionTypes.CHANGE_SETTLE_SINGERS,
+  settleSingers: res.artists
+});
+export const changeHotAnchorAction = (res) => ({
+  type: actionTypes.CHANGE_HOT_ANCHORS,
+  hotAnchors: res.list
 });
 
 //执行请求函数获取banner
@@ -73,5 +83,21 @@ export const getRecommendRankingAction = (idx) => {
         dispatch(changeUpSongAction(res));
         break;
     }
+  };
+};
+
+//获取推荐页入驻歌手
+export const getSettleSingerAction = (limit) => {
+  return async (dispatch) => {
+    const res = await getSettleSinger(limit);
+    dispatch(changeSettleSingerAction(res));
+  };
+};
+
+//获取热门主播
+export const getHotAnchorAction = (limit) => {
+  return async (dispatch) => {
+    const res = await getHotAnchor(limit);
+    dispatch(changeHotAnchorAction(res.data));
   };
 };

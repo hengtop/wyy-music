@@ -88,3 +88,21 @@ export const discoverMenu = [
     link: '/discover/album'
   }
 ];
+
+export const modeIcon = [
+  {
+    mode: '顺序播放',
+    showPosition: '-5px -345px',
+    hoverPosition: '-35px -345px'
+  },
+  {
+    mode: '随机播放',
+    showPosition: '-70px -250px',
+    hoverPosition: '-97px -250px'
+  },
+  {
+    mode: '单曲循环',
+    showPosition: '-68px -345px',
+    hoverPosition: '-95px -345px'
+  }
+];

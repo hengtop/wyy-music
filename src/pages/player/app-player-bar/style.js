@@ -132,7 +132,7 @@ export const Content = styled.div`
           }
           //缓冲条样式
           .ant-slider-step {
-            width: 20%;
+            width: ${(props) => props.loadProgress + '%'};
             height: 10px;
             background-image: url(${require('@/assets/img/progress_bar.png')
               .default});
@@ -248,18 +248,20 @@ export const Content = styled.div`
 
 export const LyricTip = styled.div`
   position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
   bottom: 50px;
-  min-width: 100px;
+  min-width: 200px;
   height: 40px;
   line-height: 40px;
-  background-color: rgba(0, 0, 0, 0.6);
-  border-radius: 5px;
+
+  text-align: center;
   .lyric {
     color: #fff;
     padding: 8px 20px;
     font-size: 20px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 5px;
     letter-spacing: 5px;
   }
 `;

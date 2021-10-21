@@ -8,7 +8,9 @@ const initState = Map({
   newAlbums: [],
   newSongs: [],
   upSongs: [],
-  originalSongs: []
+  originalSongs: [],
+  settleSingers: [],
+  hotAnchors: []
 });
 
 export default function (state = initState, action) {
@@ -25,6 +27,10 @@ export default function (state = initState, action) {
       return state.set('upSongs', action.upSongs);
     case actionTypes.CHANGE_ORIGINAL_SONGS:
       return state.set('originalSongs', action.originalSongs);
+    case actionTypes.CHANGE_SETTLE_SINGERS:
+      return state.set('settleSingers', action.settleSingers);
+    case actionTypes.CHANGE_HOT_ANCHORS:
+      return state.set('hotAnchors', action.hotAnchors);
     default:
       return state;
   }

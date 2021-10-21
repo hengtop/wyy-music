@@ -13,10 +13,12 @@ import {
   formatTimestamp,
   getPlaySongUrl
 } from '@/utils/format-utils';
+import { modeIcon } from '@/common/local-data';
 
 import { Slider } from 'antd';
 
 import { PlayerWrapper, Content, LyricTip } from './style';
+import PlayList from '../app-play-list';
 
 export default memo(function index() {
   //props and state
@@ -27,35 +29,24 @@ export default memo(function index() {
   const [isDrag, setIsDrag] = useState(false);
   //当前歌曲播放状态
   const [isPlay, setIsPlay] = useState(false);
-  //不同模式展示不同的图标
-  const modeIcon = [
-    {
-      mode: '顺序播放',
-      showPosition: '-5px -345px',
-      hoverPosition: '-35px -345px'
-    },
-    {
-      mode: '随机播放',
-      showPosition: '-70px -250px',
-      hoverPosition: '-97px -250px'
-    },
-    {
-      mode: '单曲循环',
-      showPosition: '-68px -345px',
-      hoverPosition: '-95px -345px'
-    }
-  ];
+  //播放列表面板展示
+  const [panelShow, setPanelShow] = useState(false);
+  //缓冲进度
+  const [loadProgress, setLoadProgress] = useState(0);
+
   //redux hooks
   const dispatch = useDispatch();
-  const { currentSong, sequence, lyricList, currentLyricIndex } = useSelector(
-    (state) => ({
-      currentSong: state.getIn(['player', 'currentSong']),
-      sequence: state.getIn(['player', 'sequence']),
-      lyricList: state.getIn(['player', 'lyricList']),
-      currentLyricIndex: state.getIn(['player', 'currentLyricIndex'])
-    }),
-    shallowEqual
-  );
+  const { currentSong, sequence, lyricList, currentLyricIndex, playList } =
+    useSelector(
+      (state) => ({
+        currentSong: state.getIn(['player', 'currentSong']),
+        sequence: state.getIn(['player', 'sequence']),
+        lyricList: state.getIn(['player', 'lyricList']),
+        currentLyricIndex: state.getIn(['player', 'currentLyricIndex']),
+        playList: state.getIn(['player', 'playList'])
+      }),
+      shallowEqual
+    );
   //其他hooks
   const audioRef = useRef();
 
@@ -74,6 +65,7 @@ export default memo(function index() {
       .play()
       .then((res) => {
         setIsPlay(true);
+        setLoadProgress(0);
       })
       .catch((err) => {
         setIsPlay(false);
@@ -95,6 +87,21 @@ export default memo(function index() {
   };
   //更新播放时间
   const updateTime = (e) => {
+    //获取音频的TimeRanges对象用于计算缓冲进度条
+    if (isPlay) {
+      try {
+        const TimeRanges = audioRef.current.buffered;
+        //这里要先判断是否获取到缓冲进度才能计算，当length为0则还没获取到
+        if (TimeRanges.length !== 0) {
+          setLoadProgress(
+            ((TimeRanges.end(TimeRanges.length - 1) * 1000) / songDuration) *
+              100
+          );
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
     if (!isDrag) {
       setCurrentTime(e.target.currentTime * 1000);
       setProgress((currentTime / songDuration) * 100);
@@ -111,7 +118,6 @@ export default memo(function index() {
       //保存当前播放歌词的索引，优化下性能，当索引改变的时候载dispatch
       if (currentLyricIndex !== i - 1) {
         dispatch(changeCurrentLyricIndexAction(i - 1));
-        console.log(lyricList[i - 1].content);
       }
     }
   };
@@ -168,12 +174,23 @@ export default memo(function index() {
       changeSongPlay(+1);
     }
   };
+
+  //点击展示或隐藏播放列表
+  const closePanel = useCallback(() => {
+    setPanelShow(!panelShow);
+  }, [panelShow]);
+
   return (
     <PlayerWrapper className="sprite_player">
       <div className="lock-bar sprite_player">
         <div className="control-btn sprite_player"></div>
       </div>
-      <Content isPlay={isPlay} sequence={sequence} modeIcon={modeIcon}>
+      <Content
+        isPlay={isPlay}
+        sequence={sequence}
+        modeIcon={modeIcon}
+        loadProgress={loadProgress}
+      >
         <div className="player-left-control">
           <div
             className="play-prev sprite_player"
@@ -191,7 +208,7 @@ export default memo(function index() {
         <div className="play-slider">
           <div className="song-cover">
             <NavLink to="/discover/player">
-              <a className="mask sprite_player"></a>
+              <i className="mask sprite_player"></i>
               <img src={getSizeImg(picUrl, 34)}></img>
             </NavLink>
           </div>
@@ -229,8 +246,12 @@ export default memo(function index() {
             onClick={changeSequence}
             title={modeIcon[sequence].mode}
           ></div>
-          <div className="show-lists sprite_player text-nowrap" title="121">
-            11111111
+          <div
+            className="show-lists sprite_player text-nowrap"
+            title="121"
+            onClick={(e) => closePanel()}
+          >
+            {playList.length}
           </div>
         </div>
       </Content>
@@ -239,12 +260,13 @@ export default memo(function index() {
           <span className="lyric">{lyricContent}</span>
         </LyricTip>
       )}
-
       <audio
         ref={audioRef}
         onTimeUpdate={(e) => updateTime(e)}
         onEnded={handleEnded}
       ></audio>
+      {/* 歌曲列表和歌词面板 */}
+      <PlayList closePanel={closePanel} panelShow={panelShow} />
     </PlayerWrapper>
   );
 });
