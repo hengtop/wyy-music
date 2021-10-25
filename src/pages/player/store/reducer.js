@@ -8,7 +8,8 @@ const initState = Map({
   currentSongIndex: 0, //当前播放歌曲在列表的索引
   sequence: 0, //播放模式   0顺序 1随机 2单曲循环
   lyricList: [], //歌词列表
-  currentLyricIndex: 0 //当前播放歌词索引
+  currentLyricIndex: 0, //当前播放歌词索引
+  globalPlayStatus: false //歌曲播放状态
 });
 
 export default function reducer(state = initState, action) {
@@ -25,6 +26,8 @@ export default function reducer(state = initState, action) {
       return state.set('lyricList', action.lyricList);
     case actionTypes.CHANGE_CURRENT_LYRIC_INDEX:
       return state.set('currentLyricIndex', action.currentLyricIndex);
+    case actionTypes.GLOBAL_PLAY_STATUS:
+      return state.set('globalPlayStatus', action.globalPlayStatus);
     default:
       return state;
   }

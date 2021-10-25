@@ -31,6 +31,11 @@ export const changeCurrentLyricIndexAction = (res) => ({
   currentLyricIndex: res
 });
 
+export const changeGlobalPlayStatusAction = (res) => ({
+  type: actionTypes.GLOBAL_PLAY_STATUS,
+  globalPlayStatus: res
+});
+
 //上下切换歌曲 ,通过一些操作播放下一首歌曲
 export const changeCurrentSongPlayAction = (tag) => {
   return (dispatch, getState) => {

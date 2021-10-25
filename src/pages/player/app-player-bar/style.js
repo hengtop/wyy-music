@@ -61,10 +61,10 @@ export const Content = styled.div`
       height: 32px;
       margin: -12px 12px 0;
       background-position: -2px
-        ${(props) => (props.isPlay ? '-167px' : '-206px')};
+        ${(props) => (props.globalPlayStatus ? '-167px' : '-206px')};
       :hover {
         background-position: -42px
-          ${(props) => (props.isPlay ? '-167px' : '-206px')};
+          ${(props) => (props.globalPlayStatus ? '-167px' : '-206px')};
       }
     }
     .play-next {

@@ -6,7 +6,8 @@ import {
   getSongDetailAction,
   changeSequenceAction,
   changeCurrentSongPlayAction,
-  changeCurrentLyricIndexAction
+  changeCurrentLyricIndexAction,
+  changeGlobalPlayStatusAction
 } from '../store';
 import {
   getSizeImg,
@@ -27,8 +28,6 @@ export default memo(function index() {
   const [progress, setProgress] = useState(0);
   //是否正在拖动进度条
   const [isDrag, setIsDrag] = useState(false);
-  //当前歌曲播放状态
-  const [isPlay, setIsPlay] = useState(false);
   //播放列表面板展示
   const [panelShow, setPanelShow] = useState(false);
   //缓冲进度
@@ -36,20 +35,29 @@ export default memo(function index() {
 
   //redux hooks
   const dispatch = useDispatch();
-  const { currentSong, sequence, lyricList, currentLyricIndex, playList } =
-    useSelector(
-      (state) => ({
-        currentSong: state.getIn(['player', 'currentSong']),
-        sequence: state.getIn(['player', 'sequence']),
-        lyricList: state.getIn(['player', 'lyricList']),
-        currentLyricIndex: state.getIn(['player', 'currentLyricIndex']),
-        playList: state.getIn(['player', 'playList'])
-      }),
-      shallowEqual
-    );
+  const {
+    currentSong,
+    sequence,
+    lyricList,
+    currentLyricIndex,
+    playList,
+    globalPlayStatus
+  } = useSelector(
+    (state) => ({
+      currentSong: state.getIn(['player', 'currentSong']),
+      sequence: state.getIn(['player', 'sequence']),
+      lyricList: state.getIn(['player', 'lyricList']),
+      currentLyricIndex: state.getIn(['player', 'currentLyricIndex']),
+      playList: state.getIn(['player', 'playList']),
+      globalPlayStatus: state.getIn(['player', 'globalPlayStatus'])
+    }),
+    shallowEqual
+  );
   //其他hooks
   const audioRef = useRef();
+  const playListRef = useRef();
 
+  //初始化播放歌曲
   useEffect(() => {
     dispatch(getSongDetailAction(31256837));
   }, [dispatch]);
@@ -59,19 +67,10 @@ export default memo(function index() {
     audioRef.current.src = getPlaySongUrl(currentSong.id);
     //从头播放
     setCurrentTime(audioRef.current.currentTime);
-    //这里是audio的一个维问题，当我们第一次进入浏览器或者刷新，audio是不会播放的，而且会报错。需要我们手动执行播放，这个主要是谷歌浏览器的问题为了保证进入页面不自动播放
-    //另外play()函数执行返回一个promise，所以我们可以根据是否报错来修改播放状态。
-    audioRef.current
-      .play()
-      .then((res) => {
-        setIsPlay(true);
-        setLoadProgress(0);
-      })
-      .catch((err) => {
-        setIsPlay(false);
-        console.warn(err);
-      });
-  }, [currentSong]);
+    if (globalPlayStatus) {
+      playMusic();
+    }
+  }, [currentSong, globalPlayStatus]);
 
   //其他逻辑
   const picUrl = (currentSong.al && currentSong.al.picUrl) || '';
@@ -80,15 +79,31 @@ export default memo(function index() {
   const lyricContent =
     (lyricList.length && lyricList[currentLyricIndex].content) || '';
 
-  //播放/暂停 按钮
   const playMusic = () => {
-    isPlay ? audioRef.current.pause() : audioRef.current.play();
-    setIsPlay(!isPlay);
+    //这里是audio的一个问题，当我们第一次进入浏览器或者刷新，audio是不会播放的，而且会报错。需要我们手动执行播放，这个主要是谷歌浏览器的问题为了保证进入页面不自动播放
+    //另外play()函数执行返回一个promise，所以我们可以根据是否报错来修改播放状态。
+    //todo 切换歌曲就会导致歌曲播放，这里要将这两个逻辑解耦
+    audioRef.current
+      .play()
+      .then(() => {
+        dispatch(changeGlobalPlayStatusAction(true));
+        setLoadProgress(0);
+      })
+      .catch((err) => {
+        dispatch(changeGlobalPlayStatusAction(false));
+        console.warn(err);
+      });
+  };
+
+  //播放/暂停 按钮
+  const controlPlay = () => {
+    globalPlayStatus ? audioRef.current.pause() : audioRef.current.play();
+    dispatch(changeGlobalPlayStatusAction(!globalPlayStatus));
   };
   //更新播放时间
   const updateTime = (e) => {
     //获取音频的TimeRanges对象用于计算缓冲进度条
-    if (isPlay) {
+    if (globalPlayStatus) {
       try {
         const TimeRanges = audioRef.current.buffered;
         //这里要先判断是否获取到缓冲进度才能计算，当length为0则还没获取到
@@ -121,7 +136,7 @@ export default memo(function index() {
       }
     }
   };
-  //拖动进度条控制播放时间
+  //拖动进度条控制播放时间,拖动的时候不影响播放
   const sliderChange = useCallback(
     (value) => {
       setIsDrag(true);
@@ -148,32 +163,34 @@ export default memo(function index() {
     }
     dispatch(changeSequenceAction(currentSequence));
   };
-  //重新播放
+  //重新播放(单曲循环，或者列表只有一首歌时的手动切换)
   const replay = () => {
     setCurrentTime(0);
     audioRef.current.currentTime = 0;
-    audioRef.current.play();
+    if (!globalPlayStatus) {
+      return;
+    }
+    playMusic();
   };
 
-  //切换歌曲
+  //切换歌曲（手动切换）
   const changeSongPlay = (tag) => {
-    //单曲循环
-    if (sequence === 2) {
+    //单曲循环/或者只有一首个在列表中
+    if (sequence === 2 || playList.length === 1) {
       replay();
     } else {
       dispatch(changeCurrentSongPlayAction(tag));
     }
   };
-  //歌曲播放结束处理
+  //歌曲播放结束处理（自动切换）
   const handleEnded = () => {
-    //如果是单曲循环
-    if (sequence === 2) {
-      replay();
-    } else {
-      //切换歌曲
-      changeSongPlay(+1);
-    }
+    changeSongPlay(+1);
   };
+
+  //重置滚动歌词位置,注意这个ref传递了两个组件，获取的是孙子组件的ref,其实不需要重置了但是ref引用关系这里就保留了，主要问题是歌词索引和滚动问题
+  /*  const resetLyric = () => {
+    playListRef.current.resetLyric();
+  }; */
 
   //点击展示或隐藏播放列表
   const closePanel = useCallback(() => {
@@ -186,7 +203,7 @@ export default memo(function index() {
         <div className="control-btn sprite_player"></div>
       </div>
       <Content
-        isPlay={isPlay}
+        globalPlayStatus={globalPlayStatus}
         sequence={sequence}
         modeIcon={modeIcon}
         loadProgress={loadProgress}
@@ -198,7 +215,7 @@ export default memo(function index() {
           ></div>
           <div
             className="play-stop sprite_player"
-            onClick={(e) => playMusic()}
+            onClick={(e) => controlPlay()}
           ></div>
           <div
             className="play-next sprite_player"
@@ -220,6 +237,7 @@ export default memo(function index() {
             <div className="slider">
               <div className="slider-item">
                 <Slider
+                  step="0.1"
                   value={progress}
                   onChange={sliderChange}
                   onAfterChange={sliderAfterChange}
@@ -266,7 +284,11 @@ export default memo(function index() {
         onEnded={handleEnded}
       ></audio>
       {/* 歌曲列表和歌词面板 */}
-      <PlayList closePanel={closePanel} panelShow={panelShow} />
+      <PlayList
+        closePanel={closePanel}
+        panelShow={panelShow}
+        ref={playListRef}
+      />
     </PlayerWrapper>
   );
 });

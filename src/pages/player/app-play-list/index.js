@@ -1,8 +1,8 @@
-import React, { memo } from 'react';
+import React, { forwardRef, memo } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import classNames from 'classnames';
 
-import { formatTimestamp, getBlurImg } from '@/utils/format-utils';
+import { formatTimestamp } from '@/utils/format-utils';
 import { getSongDetailAction } from '../store';
 
 import {
@@ -17,7 +17,7 @@ import {
 } from './style';
 import LyricList from '../app-lyric-list';
 
-export default memo(function index(props) {
+function index(props, ref) {
   //props/state
   const { closePanel, panelShow } = props;
 
@@ -89,10 +89,12 @@ export default memo(function index(props) {
             })}
           </PanelContentLeft>
           <PanelContentRight>
-            <LyricList />
+            <LyricList ref={ref} />
           </PanelContentRight>
         </PanelContent>
       </PanelContentWrapper>
     </PanelWrapper>
   );
-});
+}
+
+export default memo(forwardRef(index));

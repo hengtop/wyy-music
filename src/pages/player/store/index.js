@@ -3,7 +3,8 @@ import {
   getSongDetailAction,
   changeSequenceAction,
   changeCurrentSongPlayAction,
-  changeCurrentLyricIndexAction
+  changeCurrentLyricIndexAction,
+  changeGlobalPlayStatusAction
 } from './actionCreators';
 
 export {
@@ -11,5 +12,6 @@ export {
   getSongDetailAction,
   changeSequenceAction,
   changeCurrentSongPlayAction,
-  changeCurrentLyricIndexAction
+  changeCurrentLyricIndexAction,
+  changeGlobalPlayStatusAction
 };
