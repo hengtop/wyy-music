@@ -121,12 +121,16 @@ export default memo(function index() {
     let i = 0;
     const _currentTime = e.target.currentTime * 1000;
     for (; i < lyricList.length; i++) {
-      if (_currentTime < lyricList[i].time) {
+      if (_currentTime <= lyricList[i].time) {
         break;
       }
     }
+    //默认展示第一首歌词，不需要dispatch，否则会导致索引错误
+    if (i === 0) {
+      return;
+    }
+    //保存当前播放歌词的索引，优化下性能，当索引改变的时候载dispatch
     if (lyricList.length !== 0) {
-      //保存当前播放歌词的索引，优化下性能，当索引改变的时候载dispatch
       if (currentLyricIndex !== i - 1) {
         dispatch(changeCurrentLyricIndexAction(i - 1));
       }
