@@ -1,11 +1,12 @@
+/*
+ * @Date: 2021-10-13 21:36:22
+ * @LastEditors: zhangheng
+ * @LastEditTime: 2021-11-02 19:22:39
+ */
 import React, { memo } from 'react';
-import { useDispatch } from 'react-redux';
 
 import { getSizeImg } from '@/utils/format-utils';
-import {
-  getSongDetailAction,
-  changeGlobalPlayStatusAction
-} from '@/pages/player/store';
+import { usePlaySong } from '@/hooks/usePlaySong';
 
 import { RankingWrapper } from './style';
 
@@ -15,15 +16,9 @@ export default memo(function index(props) {
   const { tracks: songsList = [] } = rankingInfo;
 
   //redux hooks
-  const dispatch = useDispatch();
-
+  /* other hooks */
+  const [getSongToplayMusic] = usePlaySong();
   //其他逻辑
-  //点击某一首歌的播放按钮进行播放
-  const getSongToplayMusic = (ids) => {
-    dispatch(getSongDetailAction(ids));
-    //设置播放状态为开始播放
-    dispatch(changeGlobalPlayStatusAction(true));
-  };
 
   return (
     <RankingWrapper>

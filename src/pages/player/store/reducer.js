@@ -1,3 +1,8 @@
+/*
+ * @Date: 2021-10-15 14:09:10
+ * @LastEditors: zhangheng
+ * @LastEditTime: 2021-10-30 19:32:22
+ */
 import { Map } from 'immutable';
 
 import * as actionTypes from './constant';
@@ -9,7 +14,7 @@ const initState = Map({
   sequence: 0, //播放模式   0顺序 1随机 2单曲循环
   lyricList: [], //歌词列表
   currentLyricIndex: 0, //当前播放歌词索引
-  globalPlayStatus: false //歌曲播放状态
+  globalPlayStatus: false //这个标识表示第一次打开浏览器或者刷新浏览器不会自动播放歌曲，但是播放组件自己维护着一个播放状态
 });
 
 export default function reducer(state = initState, action) {

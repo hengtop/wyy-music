@@ -6,8 +6,7 @@ import {
   getSongDetailAction,
   changeSequenceAction,
   changeCurrentSongPlayAction,
-  changeCurrentLyricIndexAction,
-  changeGlobalPlayStatusAction
+  changeCurrentLyricIndexAction
 } from '../store';
 import {
   getSizeImg,
@@ -32,6 +31,8 @@ export default memo(function index() {
   const [panelShow, setPanelShow] = useState(false);
   //缓冲进度
   const [loadProgress, setLoadProgress] = useState(0);
+  //当前组件局部的播放播放状态
+  const [isPlay, setIsPlay] = useState(false);
 
   //redux hooks
   const dispatch = useDispatch();
@@ -82,39 +83,34 @@ export default memo(function index() {
   const playMusic = () => {
     //这里是audio的一个问题，当我们第一次进入浏览器或者刷新，audio是不会播放的，而且会报错。需要我们手动执行播放，这个主要是谷歌浏览器的问题为了保证进入页面不自动播放
     //另外play()函数执行返回一个promise，所以我们可以根据是否报错来修改播放状态。
-    //todo 切换歌曲就会导致歌曲播放，这里要将这两个逻辑解耦
+    //todo 切换歌曲就会导致歌曲播放，这里要将这两个逻辑解耦（完成）
     audioRef.current
       .play()
       .then(() => {
-        dispatch(changeGlobalPlayStatusAction(true));
+        setIsPlay(true);
         setLoadProgress(0);
       })
       .catch((err) => {
-        dispatch(changeGlobalPlayStatusAction(false));
+        setIsPlay(false);
         console.warn(err);
       });
   };
 
   //播放/暂停 按钮
   const controlPlay = () => {
-    globalPlayStatus ? audioRef.current.pause() : audioRef.current.play();
-    dispatch(changeGlobalPlayStatusAction(!globalPlayStatus));
+    setIsPlay(!isPlay);
+    isPlay ? audioRef.current.pause() : audioRef.current.play();
   };
   //更新播放时间
   const updateTime = (e) => {
     //获取音频的TimeRanges对象用于计算缓冲进度条
-    if (globalPlayStatus) {
-      try {
-        const TimeRanges = audioRef.current.buffered;
-        //这里要先判断是否获取到缓冲进度才能计算，当length为0则还没获取到
-        if (TimeRanges.length !== 0) {
-          setLoadProgress(
-            ((TimeRanges.end(TimeRanges.length - 1) * 1000) / songDuration) *
-              100
-          );
-        }
-      } catch (error) {
-        console.log(error);
+    if (isPlay) {
+      const TimeRanges = audioRef.current.buffered;
+      //这里要先判断是否获取到缓冲进度才能计算，当length为0则还没获取到
+      if (TimeRanges.length !== 0) {
+        setLoadProgress(
+          ((TimeRanges.end(TimeRanges.length - 1) * 1000) / songDuration) * 100
+        );
       }
     }
     if (!isDrag) {
@@ -167,7 +163,7 @@ export default memo(function index() {
   const replay = () => {
     setCurrentTime(0);
     audioRef.current.currentTime = 0;
-    if (!globalPlayStatus) {
+    if (!isPlay) {
       return;
     }
     playMusic();
@@ -203,7 +199,7 @@ export default memo(function index() {
         <div className="control-btn sprite_player"></div>
       </div>
       <Content
-        globalPlayStatus={globalPlayStatus}
+        globalPlayStatus={isPlay}
         sequence={sequence}
         modeIcon={modeIcon}
         loadProgress={loadProgress}
@@ -273,7 +269,7 @@ export default memo(function index() {
           </div>
         </div>
       </Content>
-      {lyricContent.length && (
+      {lyricContent.length && isPlay && (
         <LyricTip>
           <span className="lyric">{lyricContent}</span>
         </LyricTip>

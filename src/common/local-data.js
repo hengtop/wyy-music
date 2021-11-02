@@ -106,3 +106,14 @@ export const modeIcon = [
     hoverPosition: '-95px -345px'
   }
 ];
+
+export const searchTab = [
+  { name: '单曲', type: 1 },
+  { name: '歌手', type: 2 },
+  { name: '专辑', type: 3 },
+  { name: '视频', type: 4 },
+  { name: '歌词', type: 5 },
+  { name: '歌单', type: 6 },
+  { name: '声音主播', type: 7 },
+  { name: '用户', type: 8 }
+];

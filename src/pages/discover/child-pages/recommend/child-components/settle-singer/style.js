@@ -22,7 +22,7 @@ export const SingerWrapper = styled.div`
       }
     }
     :hover {
-      background-position: right -181px;
+      background-position: right -182px;
       a {
         background-position: 0 -141px;
       }

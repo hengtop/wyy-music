@@ -1,13 +1,26 @@
+/*
+ * @Date: 2021-10-07 16:52:01
+ * @LastEditors: zhangheng
+ * @LastEditTime: 2021-11-02 16:13:42
+ */
 import React, { memo } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import { Input } from 'antd';
 //import { SearchOutlined } from '@ant-design/icons';
 
 import { headerLinks } from '@/common/local-data';
+import { useSearchInput } from '@/hooks/useSearchInput';
 
 import { HeaderWrapper, HeaderLeft, HeaderRight } from './style';
+import SearchTip from '../search-tip';
 
-export default memo(function SaberHeader() {
+function SaberHeader(props) {
+  /* state/props */
+  const { keywords, songTips, inputRef, showSearchRes, handleSearchEvent } =
+    useSearchInput(props);
+  /* redux hooks */
+  /* other hooks */
+  /* 其他逻辑 */
   //处理导航栏，前三个为路由导航，后三个为超链接
   function showNavTitle(item, index) {
     if (index < 3) {
@@ -33,10 +46,22 @@ export default memo(function SaberHeader() {
         </HeaderLeft>
         <HeaderRight>
           <Input
+            ref={inputRef}
+            type="text"
             className="search"
             placeholder="音乐/视频/电台/用户"
+            value={keywords}
+            onChange={showSearchRes}
+            onFocus={(e) => handleSearchEvent(e)}
+            onPressEnter={(e) => handleSearchEvent(e)}
             /* prefix={<SearchOutlined />} */
           />
+          {keywords.length && songTips.length ? (
+            <SearchTip className={'search-tip'} songTips={songTips} />
+          ) : (
+            ''
+          )}
+
           <button className="btn">创作者中心</button>
           <a className="login" href="#">
             登录
@@ -46,4 +71,6 @@ export default memo(function SaberHeader() {
       <div className="divider"></div>
     </HeaderWrapper>
   );
-});
+}
+
+export default memo(withRouter(SaberHeader));

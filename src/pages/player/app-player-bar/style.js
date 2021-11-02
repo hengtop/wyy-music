@@ -37,7 +37,7 @@ export const Content = styled.div`
   margin: 20px auto 0;
   display: flex;
   .player-left-control {
-    width: 140px;
+    width: 146px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -45,32 +45,32 @@ export const Content = styled.div`
     .play-prev,
     .play-next,
     .play-stop {
-      width: 25px;
-      height: 25px;
+      width: 28px;
+      height: 28px;
       margin-top: -10px;
     }
     .play-prev {
-      background-position: -2px -132px;
+      background-position: -0px -131px;
       margin-left: 35px;
       :hover {
-        background-position: -32px -132px;
+        background-position: -30px -131px;
       }
     }
     .play-stop {
-      width: 34px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
       margin: -12px 12px 0;
-      background-position: -2px
-        ${(props) => (props.globalPlayStatus ? '-167px' : '-206px')};
+      background-position: -1px
+        ${(props) => (props.globalPlayStatus ? '-165px' : '-204px')};
       :hover {
-        background-position: -42px
-          ${(props) => (props.globalPlayStatus ? '-167px' : '-206px')};
+        background-position: -41px
+          ${(props) => (props.globalPlayStatus ? '-165px' : '-204px')};
       }
     }
     .play-next {
-      background-position: -82px -132px;
+      background-position: -81px -131px;
       :hover {
-        background-position: -112px -132px;
+        background-position: -111px -131px;
       }
     }
   }

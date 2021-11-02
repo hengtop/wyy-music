@@ -1,3 +1,8 @@
+/*
+ * @Date: 2021-10-07 16:57:07
+ * @LastEditors: zhangheng
+ * @LastEditTime: 2021-11-01 21:14:37
+ */
 import React, { lazy } from 'react';
 import { Redirect } from 'react-router-dom';
 
@@ -11,7 +16,8 @@ const Artist = lazy(() => import('@/pages/discover/child-pages/artist'));
 const Djradio = lazy(() => import('@/pages/discover/child-pages/djradio'));
 const Ranking = lazy(() => import('@/pages/discover/child-pages/ranking'));
 const Songs = lazy(() => import('@/pages/discover/child-pages/songs'));
-const Player = lazy(() => import('@/pages/player'));
+const Song = lazy(() => import('@/pages/player'));
+const Search = lazy(() => import('@/pages/search'));
 
 const routes = [
   {
@@ -55,10 +61,14 @@ const routes = [
         component: Songs
       },
       {
-        path: '/discover/player',
-        component: Player
+        path: '/discover/song',
+        component: Song
       }
     ]
+  },
+  {
+    path: '/search',
+    component: Search
   },
   {
     path: '/mine',

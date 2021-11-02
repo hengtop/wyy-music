@@ -57,6 +57,7 @@ export const HeaderLeft = styled.div`
 `;
 
 export const HeaderRight = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   .search {
@@ -75,6 +76,9 @@ export const HeaderRight = styled.div`
       font-size: 12px;
       text-align: center;
     }
+  }
+  .search:focus + .search-tip {
+    display: block;
   }
 
   .ant-input {

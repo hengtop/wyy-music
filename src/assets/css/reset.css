@@ -154,6 +154,12 @@ button {
 .sprite_list {
   background: url(../img/playlist.png) no-repeat 0 9999px;
 }
+.sprite_input {
+  background: url(../img/input.png) no-repeat 0 9999px;
+}
+.sprite_tab {
+  background: url(../img/tab.png) no-repeat 0 9999px;
+}
 
 .image_cover {
   position: absolute;

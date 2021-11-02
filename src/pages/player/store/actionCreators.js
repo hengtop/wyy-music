@@ -112,9 +112,7 @@ export const getSongDetailAction = (ids) => {
 //获取歌词
 export const getSongLyricAction = (id) => {
   return async (dispatch) => {
-    const {
-      lrc: { lyric }
-    } = await getSongLyric(id);
-    dispatch(changeLyricsListAction(parseLyric(lyric)));
+    const { lrc } = await getSongLyric(id);
+    dispatch(changeLyricsListAction(parseLyric(lrc?.lyric || '')));
   };
 };
