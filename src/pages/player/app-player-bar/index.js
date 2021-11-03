@@ -1,12 +1,14 @@
 import React, { memo, useEffect, useRef, useState, useCallback } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { NavLink } from 'react-router-dom';
+import event from '@/utils/event';
 
 import {
   getSongDetailAction,
   changeSequenceAction,
   changeCurrentSongPlayAction,
-  changeCurrentLyricIndexAction
+  changeCurrentLyricIndexAction,
+  changeGlobalPlayStatusAction
 } from '../store';
 import {
   getSizeImg,
@@ -31,8 +33,6 @@ export default memo(function index() {
   const [panelShow, setPanelShow] = useState(false);
   //缓冲进度
   const [loadProgress, setLoadProgress] = useState(0);
-  //当前组件局部的播放播放状态
-  const [isPlay, setIsPlay] = useState(false);
 
   //redux hooks
   const dispatch = useDispatch();
@@ -71,7 +71,16 @@ export default memo(function index() {
     if (globalPlayStatus) {
       playMusic();
     }
-  }, [currentSong, globalPlayStatus]);
+  }, [currentSong]);
+  //订阅重播事件
+  useEffect(() => {
+    event.on('replay', () => {
+      replay();
+    });
+    return () => {
+      event.removeListener('replay');
+    };
+  }, []);
 
   //其他逻辑
   const picUrl = (currentSong.al && currentSong.al.picUrl) || '';
@@ -87,24 +96,25 @@ export default memo(function index() {
     audioRef.current
       .play()
       .then(() => {
-        setIsPlay(true);
         setLoadProgress(0);
       })
       .catch((err) => {
-        setIsPlay(false);
+        //播放失败就将播放状态设置为结束
+        dispatch(changeGlobalPlayStatusAction(false));
         console.warn(err);
       });
   };
 
   //播放/暂停 按钮
   const controlPlay = () => {
-    setIsPlay(!isPlay);
-    isPlay ? audioRef.current.pause() : audioRef.current.play();
+    dispatch(changeGlobalPlayStatusAction(!globalPlayStatus));
+    globalPlayStatus ? audioRef.current.pause() : audioRef.current.play();
   };
+
   //更新播放时间
   const updateTime = (e) => {
     //获取音频的TimeRanges对象用于计算缓冲进度条
-    if (isPlay) {
+    if (globalPlayStatus) {
       const TimeRanges = audioRef.current.buffered;
       //这里要先判断是否获取到缓冲进度才能计算，当length为0则还没获取到
       if (TimeRanges.length !== 0) {
@@ -165,9 +175,10 @@ export default memo(function index() {
   };
   //重新播放(单曲循环，或者列表只有一首歌时的手动切换)
   const replay = () => {
+    console.log('ahahh');
     setCurrentTime(0);
     audioRef.current.currentTime = 0;
-    if (!isPlay) {
+    if (!globalPlayStatus) {
       return;
     }
     playMusic();
@@ -203,7 +214,7 @@ export default memo(function index() {
         <div className="control-btn sprite_player"></div>
       </div>
       <Content
-        globalPlayStatus={isPlay}
+        globalPlayStatus={globalPlayStatus}
         sequence={sequence}
         modeIcon={modeIcon}
         loadProgress={loadProgress}
@@ -273,7 +284,7 @@ export default memo(function index() {
           </div>
         </div>
       </Content>
-      {lyricContent.length && isPlay && (
+      {lyricContent.length && globalPlayStatus && (
         <LyricTip>
           <span className="lyric">{lyricContent}</span>
         </LyricTip>

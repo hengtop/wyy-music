@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-11-02 19:18:11
  * @LastEditors: zhangheng
- * @LastEditTime: 2021-11-02 19:59:20
+ * @LastEditTime: 2021-11-03 17:08:33
  */
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import {
@@ -10,8 +10,10 @@ import {
   changeGlobalPlayStatusAction
 } from '@/pages/player/store';
 import { getSongDetail } from '@/network/api/player';
+import event from '@/utils/event';
 
 export const usePlaySong = () => {
+  //通过发布订阅方式调用app-play-bar中的重播函数
   //点击某一首歌的播放按钮进行播放
   const dispatch = useDispatch();
   const { playList } = useSelector(
@@ -20,10 +22,16 @@ export const usePlaySong = () => {
     }),
     shallowEqual
   );
+
+  //发布一个事件
+  const replayEvent = () => {
+    event.emit('replay');
+  };
   const getSongToplayMusic = (ids) => {
     dispatch(getSongDetailAction(ids));
-    //设置播放状态为开始播放
+    //设置播放状态为从头开始播放
     dispatch(changeGlobalPlayStatusAction(true));
+    replayEvent();
   };
 
   //添加歌曲

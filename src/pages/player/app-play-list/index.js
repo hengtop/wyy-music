@@ -4,6 +4,7 @@ import classNames from 'classnames';
 
 import { formatTimestamp } from '@/utils/format-utils';
 import { getSongDetailAction } from '../store';
+import { usePlaySong } from '@/hooks/usePlaySong';
 
 import {
   PanelWrapper,
@@ -33,7 +34,7 @@ function index(props, ref) {
     shallowEqual
   );
   //other hooks
-
+  const [getSongToplayMusic] = usePlaySong();
   //其他逻辑
   const picUrl = (currentSong.al && currentSong.al.picUrl) || '';
 
@@ -76,7 +77,7 @@ function index(props, ref) {
                   className={classNames('item', {
                     active: index === currentSongIndex
                   })}
-                  onClick={(e) => changeSong(item.id)}
+                  onClick={(e) => getSongToplayMusic(item.id)}
                 >
                   <div className="is-play-icon sprite_list"></div>
                   <div className="name text-nowrap">{item.name}</div>

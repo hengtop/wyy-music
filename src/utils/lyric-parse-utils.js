@@ -1,3 +1,8 @@
+/*
+ * @Date: 2021-10-16 17:33:56
+ * @LastEditors: zhangheng
+ * @LastEditTime: 2021-11-03 19:23:15
+ */
 //解析歌词
 /*
 [00:00.00]风见学园蔚蓝组
@@ -46,6 +51,9 @@
 //const timeReg = /(\d|:|\.)*(?=])/;
 const parseExp = /\[(\d{2}):(\d{2})\.(\d{2,3})\]/;
 export const parseLyric = (songStr) => {
+  //如果没有歌词就返回默认提示歌词
+  console.log(songStr);
+
   //根据回车切分字符串
   const lineArray = songStr.split('\n');
   const lyrics = [];
@@ -67,6 +75,27 @@ export const parseLyric = (songStr) => {
         content: content
       });
     }
+  }
+  //歌词没有
+  if (songStr.length === 0 || lyrics.length === 0) {
+    return [
+      {
+        time: 0,
+        content: ''
+      },
+      {
+        time: 0,
+        content: ''
+      },
+      {
+        time: 0,
+        content: songStr
+      },
+      {
+        time: 0,
+        content: '纯音乐，请欣赏'
+      }
+    ];
   }
   return lyrics;
 };

@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-10-30 19:26:47
  * @LastEditors: zhangheng
- * @LastEditTime: 2021-11-02 19:44:25
+ * @LastEditTime: 2021-11-03 17:28:46
  */
 import React, { memo, useState, useEffect } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
@@ -13,7 +13,6 @@ import { useSearchInput } from '@/hooks/useSearchInput';
 import { formatTimestamp } from '@/utils/format-utils';
 import { usePlaySong } from '@/hooks/usePlaySong';
 
-import { Pagination } from 'antd';
 import {
   SearchWrapper,
   SearchHeader,
@@ -22,6 +21,7 @@ import {
   SearchFooter
 } from './style';
 import SearchTip from '@/components/search-tip';
+import SaberPagination from '@/components/pagination';
 
 export default memo(function index(props) {
   /* props/state */
@@ -167,7 +167,7 @@ export default memo(function index(props) {
       </SearchList>
       <SearchFooter>
         {/* todo 这里有个bug，就是在第一页切换到第二页的时候滚动条会跳到上面去，不知道为啥， */}
-        <Pagination
+        <SaberPagination
           defaultPageSize={30}
           current={currentPage}
           total={songCount}
