@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import event from '@/utils/event';
 
 import {
-  getSongDetailAction,
+  getCurrentSongDetailAction,
   changeSequenceAction,
   changeCurrentSongPlayAction,
   changeCurrentLyricIndexAction,
@@ -60,7 +60,7 @@ export default memo(function index() {
 
   //初始化播放歌曲
   useEffect(() => {
-    dispatch(getSongDetailAction(31256837));
+    dispatch(getCurrentSongDetailAction(31256837));
   }, [dispatch]);
   //设置歌曲的src，只需要设置一次
   useEffect(() => {
@@ -175,7 +175,6 @@ export default memo(function index() {
   };
   //重新播放(单曲循环，或者列表只有一首歌时的手动切换)
   const replay = () => {
-    console.log('ahahh');
     setCurrentTime(0);
     audioRef.current.currentTime = 0;
     if (!globalPlayStatus) {
@@ -235,7 +234,12 @@ export default memo(function index() {
         </div>
         <div className="play-slider">
           <div className="song-cover">
-            <NavLink to="/discover/player">
+            <NavLink
+              to={{
+                pathname: '/discover/song',
+                search: `?id=${currentSong.id}`
+              }}
+            >
               <i className="mask sprite_player"></i>
               <img src={getSizeImg(picUrl, 34)}></img>
             </NavLink>

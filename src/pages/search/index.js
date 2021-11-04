@@ -1,12 +1,12 @@
 /*
  * @Date: 2021-10-30 19:26:47
  * @LastEditors: zhangheng
- * @LastEditTime: 2021-11-03 17:28:46
+ * @LastEditTime: 2021-11-04 16:04:47
  */
 import React, { memo, useState, useEffect } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 import classnames from 'classnames';
-import Qs from 'qs';
+import { queryParse } from '@/utils/query-format';
 
 import { searchTab } from '@/common/local-data';
 import { useSearchInput } from '@/hooks/useSearchInput';
@@ -50,7 +50,7 @@ export default memo(function index(props) {
 
   /* other hooks */
   useEffect(() => {
-    let searchQueryInfo = Qs.parse(props.location.search.split('?')[1]);
+    let searchQueryInfo = queryParse(props.location.search);
     setKeywords(searchQueryInfo.keywords);
   }, [props.location.search]);
 

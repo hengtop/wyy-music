@@ -3,7 +3,7 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import classNames from 'classnames';
 
 import { formatTimestamp } from '@/utils/format-utils';
-import { getSongDetailAction } from '../store';
+import { getCurrentSongDetailAction } from '../store';
 import { usePlaySong } from '@/hooks/usePlaySong';
 
 import {
@@ -41,7 +41,7 @@ function index(props, ref) {
   const author = (item) => (item.ar && item.ar[0].name) || '';
 
   const changeSong = (ids) => {
-    dispatch(getSongDetailAction(ids));
+    dispatch(getCurrentSongDetailAction(ids));
   };
   return (
     <PanelWrapper panelShow={panelShow}>

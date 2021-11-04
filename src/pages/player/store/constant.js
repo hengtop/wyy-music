@@ -1,3 +1,10 @@
+/*
+ * @Date: 2021-10-15 14:09:17
+ * @LastEditors: zhangheng
+ * @LastEditTime: 2021-11-04 16:55:59
+ */
+export const CHANGE_SONG_INFO = 'CHANGE_SONG_INFO';
+export const CHANGE_SONG_LYRIC = 'CHANGE_SONG_LYRIC';
 export const CHANGE_CURRENT_SONG = 'CHANGE_CURRENT_SONG';
 export const CHANGE_PLAY_LIST = 'CHANGE_PLAY_LIST';
 export const CHANGE_CURRENT_SONG_INDEX = 'CHANGE_CURRENT_SONG_INDEX';

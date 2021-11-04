@@ -6,7 +6,7 @@
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import {
   changePlayListAction,
-  getSongDetailAction,
+  getCurrentSongDetailAction,
   changeGlobalPlayStatusAction
 } from '@/pages/player/store';
 import { getSongDetail } from '@/network/api/player';
@@ -28,7 +28,7 @@ export const usePlaySong = () => {
     event.emit('replay');
   };
   const getSongToplayMusic = (ids) => {
-    dispatch(getSongDetailAction(ids));
+    dispatch(getCurrentSongDetailAction(ids));
     //设置播放状态为从头开始播放
     dispatch(changeGlobalPlayStatusAction(true));
     replayEvent();

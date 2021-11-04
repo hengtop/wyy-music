@@ -1,6 +1,6 @@
 import { getSongDetail, getSongLyric } from '@/network/api/player';
 import { getRandom } from '@/utils/math-utils';
-import { parseLyric } from '@/utils/lyric-parse-utils';
+import { parseLyric, onlyLyric } from '@/utils/lyric-parse-utils';
 import * as actionTypes from './constant';
 
 export const changeCurrentSongAction = (res) => ({
@@ -34,6 +34,16 @@ export const changeCurrentLyricIndexAction = (res) => ({
 export const changeGlobalPlayStatusAction = (res) => ({
   type: actionTypes.GLOBAL_PLAY_STATUS,
   globalPlayStatus: res
+});
+
+export const changeSongInfoAction = (res) => ({
+  type: actionTypes.CHANGE_SONG_INFO,
+  songInfo: res
+});
+
+export const changeSongLyricAction = (res) => ({
+  type: actionTypes.CHANGE_SONG_LYRIC,
+  songLyric: res
 });
 
 //上下切换歌曲 ,通过一些操作播放下一首歌曲
@@ -71,12 +81,12 @@ export const changeCurrentSongPlayAction = (tag) => {
     dispatch(changeCurrentSongAction(currentSong));
     dispatch(changeCurrentSongIndexAction(currentSongIndex));
     //3. 请求歌词
-    dispatch(getSongLyricAction(currentSong.id));
+    dispatch(getCurrentSongLyricAction(currentSong.id));
   };
 };
 
 //获取歌曲详情进行播放
-export const getSongDetailAction = (ids) => {
+export const getCurrentSongDetailAction = (ids) => {
   return async (dispatch, getState) => {
     let song = null;
     //1.根据id查找列表中是否已经有了该歌曲
@@ -90,7 +100,7 @@ export const getSongDetailAction = (ids) => {
       const song = playList[songIndex];
       dispatch(changeCurrentSongAction(song));
       //3. 请求歌词
-      dispatch(getSongLyricAction(song.id));
+      dispatch(getCurrentSongLyricAction(song.id));
     } else {
       //没有找到，去请求
       const res = await getSongDetail(ids);
@@ -104,15 +114,31 @@ export const getSongDetailAction = (ids) => {
       dispatch(changeCurrentSongIndexAction(newPlayList.length - 1));
       dispatch(changeCurrentSongAction(song));
       //3. 请求歌词
-      dispatch(getSongLyricAction(song.id));
+      dispatch(getCurrentSongLyricAction(song.id));
     }
   };
 };
 
 //获取歌词
-export const getSongLyricAction = (id) => {
+export const getCurrentSongLyricAction = (id) => {
   return async (dispatch) => {
     const { lrc } = await getSongLyric(id);
     dispatch(changeLyricsListAction(parseLyric(lrc?.lyric || '')));
+  };
+};
+
+//获取歌曲信息，不一定播放
+export const getSongInfoAction = (id) => {
+  return async (dispatch) => {
+    const res = await getSongDetail(id);
+    let song = res.songs && res.songs[0];
+    dispatch(changeSongInfoAction(song));
+  };
+};
+
+export const getSongLyricAction = (id) => {
+  return async (dispatch) => {
+    const { lrc } = await getSongLyric(id);
+    dispatch(changeSongLyricAction(onlyLyric(lrc?.lyric || '')));
   };
 };

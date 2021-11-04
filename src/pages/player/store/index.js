@@ -1,24 +1,28 @@
 /*
  * @Date: 2021-10-15 14:08:45
  * @LastEditors: zhangheng
- * @LastEditTime: 2021-11-02 19:43:21
+ * @LastEditTime: 2021-11-04 17:07:28
  */
 import reducer from './reducer';
 import {
   changePlayListAction,
-  getSongDetailAction,
+  getCurrentSongDetailAction,
   changeSequenceAction,
   changeCurrentSongPlayAction,
   changeCurrentLyricIndexAction,
-  changeGlobalPlayStatusAction
+  changeGlobalPlayStatusAction,
+  getSongInfoAction,
+  getSongLyricAction
 } from './actionCreators';
 
 export {
   reducer,
-  getSongDetailAction,
+  getCurrentSongDetailAction,
   changePlayListAction,
   changeSequenceAction,
   changeCurrentSongPlayAction,
   changeCurrentLyricIndexAction,
-  changeGlobalPlayStatusAction
+  changeGlobalPlayStatusAction,
+  getSongInfoAction,
+  getSongLyricAction
 };
